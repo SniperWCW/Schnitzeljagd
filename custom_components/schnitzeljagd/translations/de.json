@@ -1,0 +1,166 @@
+{
+  "config": {
+    "step": {
+      "user": {
+        "title": "Schnitzeljagd einrichten",
+        "description": "Pfad zur Jagd-Datei relativ zu deinem Konfigurationsordner. Fehlt die Datei, kann die Beispieljagd \"Funkel & Luna\" dorthin kopiert werden.",
+        "data": {
+          "hunt_file": "Jagd-Datei (YAML)",
+          "install_example": "Beispieljagd kopieren, falls die Datei fehlt"
+        }
+      }
+    },
+    "error": {
+      "file_not_found": "Die Datei wurde nicht gefunden.",
+      "invalid_hunt": "Die Jagd-Datei ist ungültig: {error}"
+    },
+    "abort": {
+      "already_configured": "Diese Jagd-Datei ist bereits eingerichtet."
+    }
+  },
+  "options": {
+    "step": {
+      "init": {
+        "title": "Schnitzeljagd",
+        "data": {
+          "hunt_file": "Jagd-Datei (YAML)"
+        }
+      }
+    },
+    "error": {
+      "file_not_found": "Die Datei wurde nicht gefunden.",
+      "invalid_hunt": "Die Jagd-Datei ist ungültig: {error}"
+    }
+  },
+  "entity": {
+    "sensor": {
+      "current_station": {
+        "name": "Aktuelle Station"
+      },
+      "progress": {
+        "name": "Fortschritt"
+      }
+    },
+    "binary_sensor": {
+      "running": {
+        "name": "Spiel läuft"
+      },
+      "treasure": {
+        "name": "Schatz freigegeben"
+      }
+    },
+    "select": {
+      "station": {
+        "name": "Station"
+      }
+    },
+    "button": {
+      "prepare": {
+        "name": "Spiel vorbereiten"
+      },
+      "stop": {
+        "name": "Medien-Stopp"
+      },
+      "reset": {
+        "name": "Spiel zurücksetzen"
+      },
+      "release_treasure": {
+        "name": "Schatz manuell freigeben"
+      }
+    }
+  },
+  "services": {
+    "prepare": {
+      "name": "Spiel vorbereiten",
+      "description": "Führt die Vorbereitungsaktionen aus (z. B. Rollos schließen) und markiert das Spiel als laufend.",
+      "fields": {
+        "config_entry": {
+          "name": "Jagd",
+          "description": "Nur nötig, wenn mehrere Jagden eingerichtet sind."
+        }
+      }
+    },
+    "stop": {
+      "name": "Stoppen",
+      "description": "Bricht laufende Clips ab und führt die Stopp-Aktionen aus.",
+      "fields": {
+        "config_entry": {
+          "name": "Jagd",
+          "description": "Nur nötig, wenn mehrere Jagden eingerichtet sind."
+        }
+      }
+    },
+    "reset": {
+      "name": "Zurücksetzen",
+      "description": "Löscht alle Haken, sperrt den Schatz und führt die Reset-Aktionen aus.",
+      "fields": {
+        "config_entry": {
+          "name": "Jagd",
+          "description": "Nur nötig, wenn mehrere Jagden eingerichtet sind."
+        }
+      }
+    },
+    "release_treasure": {
+      "name": "Schatz freigeben",
+      "description": "Führt die Freigabe-Aktionen manuell aus.",
+      "fields": {
+        "config_entry": {
+          "name": "Jagd",
+          "description": "Nur nötig, wenn mehrere Jagden eingerichtet sind."
+        }
+      }
+    },
+    "reload_hunt": {
+      "name": "Jagd-Datei neu laden",
+      "description": "Liest die YAML-Datei neu ein, z. B. nach Änderungen.",
+      "fields": {
+        "config_entry": {
+          "name": "Jagd",
+          "description": "Nur nötig, wenn mehrere Jagden eingerichtet sind."
+        }
+      }
+    },
+    "set_station": {
+      "name": "Station setzen",
+      "description": "Wechselt die aktuelle Station, ohne Clips abzuspielen.",
+      "fields": {
+        "station": {
+          "name": "Station",
+          "description": "ID der Station."
+        },
+        "config_entry": {
+          "name": "Jagd",
+          "description": "Nur nötig, wenn mehrere Jagden eingerichtet sind."
+        }
+      }
+    },
+    "start_station": {
+      "name": "Station starten",
+      "description": "Wählt eine Station und spielt ihren Einleitungsclip ab.",
+      "fields": {
+        "station": {
+          "name": "Station",
+          "description": "ID der Station; leer = aktuelle Station."
+        },
+        "config_entry": {
+          "name": "Jagd",
+          "description": "Nur nötig, wenn mehrere Jagden eingerichtet sind."
+        }
+      }
+    },
+    "complete_task": {
+      "name": "Aufgabe bestätigen",
+      "description": "Setzt den Erfolgshaken und führt die Erfolgsaktionen einmalig aus.",
+      "fields": {
+        "task": {
+          "name": "Aufgabe",
+          "description": "ID der Aufgabe."
+        },
+        "config_entry": {
+          "name": "Jagd",
+          "description": "Nur nötig, wenn mehrere Jagden eingerichtet sind."
+        }
+      }
+    }
+  }
+}

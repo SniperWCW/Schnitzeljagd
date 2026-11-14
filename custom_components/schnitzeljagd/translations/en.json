@@ -1,0 +1,166 @@
+{
+  "config": {
+    "step": {
+      "user": {
+        "title": "Set up scavenger hunt",
+        "description": "Path to the hunt file relative to your config folder. If it is missing, the example hunt \"Funkel & Luna\" can be copied there.",
+        "data": {
+          "hunt_file": "Hunt file (YAML)",
+          "install_example": "Copy example hunt if the file is missing"
+        }
+      }
+    },
+    "error": {
+      "file_not_found": "The file was not found.",
+      "invalid_hunt": "The hunt file is invalid: {error}"
+    },
+    "abort": {
+      "already_configured": "This hunt file is already set up."
+    }
+  },
+  "options": {
+    "step": {
+      "init": {
+        "title": "Scavenger hunt",
+        "data": {
+          "hunt_file": "Hunt file (YAML)"
+        }
+      }
+    },
+    "error": {
+      "file_not_found": "The file was not found.",
+      "invalid_hunt": "The hunt file is invalid: {error}"
+    }
+  },
+  "entity": {
+    "sensor": {
+      "current_station": {
+        "name": "Current station"
+      },
+      "progress": {
+        "name": "Progress"
+      }
+    },
+    "binary_sensor": {
+      "running": {
+        "name": "Game running"
+      },
+      "treasure": {
+        "name": "Treasure released"
+      }
+    },
+    "select": {
+      "station": {
+        "name": "Station"
+      }
+    },
+    "button": {
+      "prepare": {
+        "name": "Prepare game"
+      },
+      "stop": {
+        "name": "Stop media"
+      },
+      "reset": {
+        "name": "Reset game"
+      },
+      "release_treasure": {
+        "name": "Release treasure manually"
+      }
+    }
+  },
+  "services": {
+    "prepare": {
+      "name": "Prepare game",
+      "description": "Runs the preparation actions (e.g. close blinds) and marks the game as running.",
+      "fields": {
+        "config_entry": {
+          "name": "Hunt",
+          "description": "Only needed if several hunts are set up."
+        }
+      }
+    },
+    "stop": {
+      "name": "Stop",
+      "description": "Aborts running clips and runs the stop actions.",
+      "fields": {
+        "config_entry": {
+          "name": "Hunt",
+          "description": "Only needed if several hunts are set up."
+        }
+      }
+    },
+    "reset": {
+      "name": "Reset",
+      "description": "Clears all checkmarks, locks the treasure and runs the reset actions.",
+      "fields": {
+        "config_entry": {
+          "name": "Hunt",
+          "description": "Only needed if several hunts are set up."
+        }
+      }
+    },
+    "release_treasure": {
+      "name": "Release treasure",
+      "description": "Manually runs the release actions.",
+      "fields": {
+        "config_entry": {
+          "name": "Hunt",
+          "description": "Only needed if several hunts are set up."
+        }
+      }
+    },
+    "reload_hunt": {
+      "name": "Reload hunt file",
+      "description": "Re-reads the YAML file, e.g. after editing it.",
+      "fields": {
+        "config_entry": {
+          "name": "Hunt",
+          "description": "Only needed if several hunts are set up."
+        }
+      }
+    },
+    "set_station": {
+      "name": "Set station",
+      "description": "Changes the current station without playing clips.",
+      "fields": {
+        "station": {
+          "name": "Station",
+          "description": "Station ID."
+        },
+        "config_entry": {
+          "name": "Hunt",
+          "description": "Only needed if several hunts are set up."
+        }
+      }
+    },
+    "start_station": {
+      "name": "Start station",
+      "description": "Selects a station and plays its intro clip.",
+      "fields": {
+        "station": {
+          "name": "Station",
+          "description": "Station ID; empty = current station."
+        },
+        "config_entry": {
+          "name": "Hunt",
+          "description": "Only needed if several hunts are set up."
+        }
+      }
+    },
+    "complete_task": {
+      "name": "Complete task",
+      "description": "Sets the success checkmark and runs the success actions once.",
+      "fields": {
+        "task": {
+          "name": "Task",
+          "description": "Task ID."
+        },
+        "config_entry": {
+          "name": "Hunt",
+          "description": "Only needed if several hunts are set up."
+        }
+      }
+    }
+  }
+}

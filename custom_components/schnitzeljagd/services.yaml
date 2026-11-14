@@ -1,0 +1,50 @@
+prepare:
+  fields:
+    config_entry: &entry
+      required: false
+      selector:
+        config_entry:
+          integration: schnitzeljagd
+
+stop:
+  fields:
+    config_entry: *entry
+
+reset:
+  fields:
+    config_entry: *entry
+
+release_treasure:
+  fields:
+    config_entry: *entry
+
+reload_hunt:
+  fields:
+    config_entry: *entry
+
+set_station:
+  fields:
+    station:
+      required: true
+      example: "2"
+      selector:
+        text:
+    config_entry: *entry
+
+start_station:
+  fields:
+    station:
+      required: false
+      example: "3"
+      selector:
+        text:
+    config_entry: *entry
+
+complete_task:
+  fields:
+    task:
+      required: true
+      example: rainbow_fixed
+      selector:
+        text:
+    config_entry: *entry

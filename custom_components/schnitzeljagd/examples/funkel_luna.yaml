@@ -1,0 +1,238 @@
+# Beispieljagd: "Funkel & Luna – Das Regenbogen-Abenteuer"
+# 6 Stationen, 7 Aufgaben. Alle Entity-IDs und Medienpfade sind PLATZHALTER –
+# bitte durch deine eigenen ersetzen (Suchen & Ersetzen im Editor genügt).
+#
+# Aktionen (on_prepare, intro, on_complete, ...) sind normale Home-Assistant-
+# Skript-Aktionen: service calls, delay, wait_for_trigger, choose, ... – und
+# zusätzlich die Services dieser Integration, z. B. schnitzeljagd.set_station.
+#
+# Medien liegen hier z. B. unter /media/schnitzeljagd/... (Medienquelle "local").
+
+name: Funkel & Luna
+subtitle: Das Regenbogen-Abenteuer
+icon: mdi:dragon
+
+# Spiel vorbereiten: Rollos schließen, Medien stoppen
+on_prepare:
+  - service: cover.close_cover
+    target:
+      entity_id: cover.platzhalter_rollos
+
+# Medien-Stopp
+on_stop:
+  - service: media_player.media_stop
+    target:
+      entity_id:
+        - media_player.esszimmer_tv
+        - media_player.gaestezimmer_tv
+        - media_player.buero_speaker
+        - media_player.kueche_kodi
+  - service: light.turn_off
+    target:
+      entity_id: light.platzhalter_led_streifen
+
+# Zurücksetzen
+on_reset:
+  - service: media_player.media_stop
+    target:
+      entity_id:
+        - media_player.esszimmer_tv
+        - media_player.gaestezimmer_tv
+        - media_player.buero_speaker
+        - media_player.kueche_kodi
+  - service: cover.open_cover
+    target:
+      entity_id: cover.platzhalter_rollos
+
+# Schatz: wird freigegeben, sobald die Aufgabe "schatz" bestätigt wird
+# (oder manuell per Button "Schatz manuell freigeben").
+treasure:
+  released_by: schatz
+  release:
+    - service: lock.unlock
+      target:
+        entity_id: lock.platzhalter_schatztruhe
+
+stations:
+  - id: "1"
+    name: Esszimmer
+    icon: mdi:silverware-fork-knife
+    description: "1A: Funkel-Luna-Funkel. Danach automatisch Kodi & 1B_1 → 1B_2. Nest-Haken: nur Fortschritt."
+    intro:
+      - service: media_player.play_media
+        target: { entity_id: media_player.esszimmer_tv }
+        data:
+          media_content_id: media-source://media_source/local/schnitzeljagd/video/1A.mp4
+          media_content_type: video/mp4
+      - delay: "00:00:30"            # Länge von 1A anpassen
+      - service: media_player.play_media
+        target: { entity_id: media_player.kueche_kodi }
+        data:
+          media_content_id: media-source://media_source/local/schnitzeljagd/video/1B_1.mp4
+          media_content_type: video/mp4
+      - delay: "00:00:20"
+      - service: media_player.play_media
+        target: { entity_id: media_player.kueche_kodi }
+        data:
+          media_content_id: media-source://media_source/local/schnitzeljagd/audio/1B_2.mp3
+          media_content_type: music
+    clips: []
+
+  - id: "2"
+    name: Gästezimmer
+    icon: mdi:rainbow
+    description: "2A: drei Audios. Haken „Regenbogen“ → Video 2B. Nach dem Video: 10 s → 3A im Büro."
+    intro:
+      - service: media_player.play_media
+        target: { entity_id: media_player.gaestezimmer_tv }
+        data:
+          media_content_id: media-source://media_source/local/schnitzeljagd/audio/2A.mp3
+          media_content_type: music
+
+  - id: "3"
+    name: Büro
+    icon: mdi:diamond-stone
+    description: "3A über Büro-Speaker; LED bleibt aus. Haken „Zaubersteine“ → Rainbow B (100 %), nach 2 s 3B."
+    intro:
+      - service: media_player.play_media
+        target: { entity_id: media_player.buero_speaker }
+        data:
+          media_content_id: media-source://media_source/local/schnitzeljagd/audio/3A.mp3
+          media_content_type: music
+
+  - id: "4"
+    name: Flur
+    icon: mdi:fire
+    description: "4A startet Dialog & Fire-Breathing Dragon bei 100 %. Haken „Lavafeld“ → 4B."
+    intro:
+      - service: media_player.play_media
+        target: { entity_id: media_player.flur_speaker }
+        data:
+          media_content_id: media-source://media_source/local/schnitzeljagd/audio/4A.mp3
+          media_content_type: music
+
+  - id: "5"
+    name: Bad
+    icon: mdi:dragon
+    description: "5A startet den Dialog. Schlüssel-Haken → 5B. Drachenei-Haken → 5C."
+    intro:
+      - service: media_player.play_media
+        target: { entity_id: media_player.bad_speaker }
+        data:
+          media_content_id: media-source://media_source/local/schnitzeljagd/audio/5A.mp3
+          media_content_type: music
+
+  - id: "6"
+    name: Wohnzimmer
+    icon: mdi:gift
+    description: "6A auf Kodi. Danach 6B_1 bewusst manuell starten. Haken „Schatz gefunden“ → 6B_2."
+    intro:
+      - service: media_player.play_media
+        target: { entity_id: media_player.wohnzimmer_kodi }
+        data:
+          media_content_id: media-source://media_source/local/schnitzeljagd/video/6A.mp4
+          media_content_type: video/mp4
+    clips:
+      - id: finale_1
+        name: Finale Teil 1 starten
+        description: Vor dem Schatz-Fund, manuell
+        icon: mdi:movie-open-play
+        actions:
+          - service: media_player.play_media
+            target: { entity_id: media_player.wohnzimmer_kodi }
+            data:
+              media_content_id: media-source://media_source/local/schnitzeljagd/video/6B_1.mp4
+              media_content_type: video/mp4
+
+tasks:
+  - id: nest
+    name: Nest & Hilferuf
+    station: "1"
+    icon: mdi:bird
+    description: Nur Fortschritt, kein zusätzlicher Clip.
+    next_station: "2"
+
+  - id: rainbow_fixed
+    name: Regenbogen repariert
+    station: "2"
+    icon: mdi:rainbow
+    description: Startet Video 2B, nach 10 s Audio 3A im Büro.
+    on_complete:
+      - service: media_player.play_media
+        target: { entity_id: media_player.gaestezimmer_tv }
+        data:
+          media_content_id: media-source://media_source/local/schnitzeljagd/video/2B.mp4
+          media_content_type: video/mp4
+      - delay: "00:00:10"             # Länge von 2B anpassen
+      - service: schnitzeljagd.start_station
+        data: { station: "3" }        # spielt 3A im Büro
+    next_station: "3"
+
+  - id: magic_stones
+    name: Zaubersteine gefunden
+    station: "3"
+    icon: mdi:diamond-stone
+    description: Regenbogen-LED bei 100 %, nach 2 s Audio 3B.
+    on_complete:
+      - service: light.turn_on
+        target: { entity_id: light.platzhalter_led_streifen }
+        data:
+          brightness_pct: 100
+          effect: Rainbow
+      - delay: "00:00:02"
+      - service: media_player.play_media
+        target: { entity_id: media_player.buero_speaker }
+        data:
+          media_content_id: media-source://media_source/local/schnitzeljagd/audio/3B.mp3
+          media_content_type: music
+    next_station: "4"
+
+  - id: lava_field
+    name: Lavafeld überquert
+    station: "4"
+    icon: mdi:fire
+    description: Startet Funkels Abschluss 4B.
+    on_complete:
+      - service: media_player.play_media
+        target: { entity_id: media_player.flur_speaker }
+        data:
+          media_content_id: media-source://media_source/local/schnitzeljagd/audio/4B.mp3
+          media_content_type: music
+    next_station: "5"
+
+  - id: dragon_key
+    name: Drachenschlüssel fertig
+    station: "5"
+    icon: mdi:key-variant
+    description: Startet Dialogfolge 5B.
+    on_complete:
+      - service: media_player.play_media
+        target: { entity_id: media_player.bad_speaker }
+        data:
+          media_content_id: media-source://media_source/local/schnitzeljagd/audio/5B.mp3
+          media_content_type: music
+
+  - id: dragon_egg
+    name: Drachenei gefunden
+    station: "5"
+    icon: mdi:egg
+    description: Startet Dialogfolge 5C.
+    on_complete:
+      - service: media_player.play_media
+        target: { entity_id: media_player.bad_speaker }
+        data:
+          media_content_id: media-source://media_source/local/schnitzeljagd/audio/5C.mp3
+          media_content_type: music
+    next_station: "6"
+
+  - id: schatz
+    name: Schatz gefunden
+    station: "6"
+    icon: mdi:treasure-chest
+    description: Startet Finale 6B_2 und gibt den Schatz frei.
+    on_complete:
+      - service: media_player.play_media
+        target: { entity_id: media_player.wohnzimmer_kodi }
+        data:
+          media_content_id: media-source://media_source/local/schnitzeljagd/video/6B_2.mp4
+          media_content_type: video/mp4

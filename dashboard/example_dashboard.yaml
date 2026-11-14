@@ -1,0 +1,69 @@
+# Beispiel-Ansicht (Raw-Konfigurationseditor des Dashboards).
+# Entity-IDs entstehen aus dem Namen der Jagd ("Funkel & Luna" -> funkel_luna_...).
+# Bei anderem Namen oder Aufgaben einfach die IDs anpassen.
+title: Spielleitung
+path: spielleitung
+cards:
+  - type: vertical-stack
+    cards:
+      - type: markdown
+        content: >
+          ## 🐉 Funkel & Luna · Spielleitung
+          Aktuelle Station: **{{ states('sensor.funkel_luna_aktuelle_station') }}**
+      - type: horizontal-stack
+        cards:
+          - type: gauge
+            entity: sensor.funkel_luna_fortschritt
+            name: Fortschritt
+            min: 0
+            max: 100
+          - type: vertical-stack
+            cards:
+              - type: tile
+                entity: binary_sensor.funkel_luna_spiel_lauft
+                name: Spiel
+              - type: tile
+                entity: binary_sensor.funkel_luna_schatz_freigegeben
+                name: Schatz
+
+  - type: grid
+    columns: 2
+    square: false
+    cards:
+      - type: tile
+        entity: button.funkel_luna_spiel_vorbereiten
+        tap_action: { action: toggle }
+      - type: tile
+        entity: button.funkel_luna_medien_stopp
+        color: red
+        tap_action: { action: toggle }
+      - type: tile
+        entity: select.funkel_luna_station
+        features:
+          - type: select-options
+
+  - type: entities
+    title: Erfolg bestätigen = Abschluss auslösen
+    show_header_toggle: false
+    entities:
+      - switch.funkel_luna_nest_hilferuf
+      - switch.funkel_luna_regenbogen_repariert
+      - switch.funkel_luna_zaubersteine_gefunden
+      - switch.funkel_luna_lavafeld_uberquert
+      - switch.funkel_luna_drachenschlussel_fertig
+      - switch.funkel_luna_drachenei_gefunden
+      - switch.funkel_luna_schatz_gefunden
+      - button.funkel_luna_schatz_manuell_freigeben
+      - button.funkel_luna_spiel_zurucksetzen
+
+  - type: entities
+    title: Stationen
+    show_header_toggle: false
+    entities:
+      - button.funkel_luna_station_1_esszimmer_starten
+      - button.funkel_luna_station_2_gastezimmer_starten
+      - button.funkel_luna_station_3_buro_starten
+      - button.funkel_luna_station_4_flur_starten
+      - button.funkel_luna_station_5_bad_starten
+      - button.funkel_luna_station_6_wohnzimmer_starten
+      - button.funkel_luna_station_6_finale_teil_1_starten
