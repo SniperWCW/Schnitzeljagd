@@ -4,11 +4,17 @@ from __future__ import annotations
 
 import logging
 
+from pathlib import Path
+
 import voluptuous as vol
+from homeassistant.components.frontend import add_extra_js_url
+from homeassistant.components.http import StaticPathConfig
 from homeassistant.config_entries import ConfigEntry, ConfigEntryState
 from homeassistant.core import HomeAssistant, ServiceCall
 from homeassistant.exceptions import ConfigEntryNotReady, ServiceValidationError
 from homeassistant.helpers import config_validation as cv
+from homeassistant.loader import async_get_integration
+from homeassistant.helpers.typing import ConfigType
 
 from .const import (
     ATTR_ENTRY,
@@ -35,6 +41,19 @@ _LOGGER = logging.getLogger(__name__)
 CONFIG_SCHEMA = cv.config_entry_only_config_schema(DOMAIN)
 
 _BASE = {vol.Optional(ATTR_ENTRY): cv.string}
+
+CARD_URL = f"/{DOMAIN}_static/schnitzeljagd-card.js"
+CARD_FILE = Path(__file__).parent / "frontend" / "schnitzeljagd-card.js"
+
+
+async def async_setup(hass: HomeAssistant, config: ConfigType) -> bool:
+    """Stellt die mitgelieferte Lovelace-Karte bereit (`custom:schnitzeljagd-card`)."""
+    integration = await async_get_integration(hass, DOMAIN)
+    await hass.http.async_register_static_paths(
+        [StaticPathConfig(CARD_URL, str(CARD_FILE), False)]
+    )
+    add_extra_js_url(hass, f"{CARD_URL}?v={integration.version}")
+    return True
 
 
 def _manager(hass: HomeAssistant, call: ServiceCall) -> HuntManager:

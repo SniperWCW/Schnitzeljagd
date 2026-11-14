@@ -43,7 +43,12 @@ class TaskSwitch(HuntEntity, SwitchEntity):
     @property
     def extra_state_attributes(self) -> dict[str, Any]:
         task = self.manager.hunt.task(self.task_id)
-        return {"station": task.station, "description": task.description}
+        return {
+            "station": task.station,
+            "description": task.description,
+            "task_name": task.name,
+            "order": self.manager.hunt.tasks.index(task),
+        }
 
     async def async_turn_on(self, **kwargs: Any) -> None:
         if not self.is_on:

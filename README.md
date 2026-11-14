@@ -87,7 +87,20 @@ Pro Jagd entsteht ein Gerät mit:
 | `button` Spiel vorbereiten, Medien-Stopp, Spiel zurücksetzen, Schatz manuell freigeben | Steuerung |
 | `button` je Station / je Clip | Einleitung bzw. Zusatzaktion starten |
 
-Ein fertiges Dashboard-Beispiel liegt in [`dashboard/example_dashboard.yaml`](dashboard/example_dashboard.yaml).
+## Lovelace-Karte (mitgeliefert)
+
+Die Integration bringt eine eigene Spielleitungs-Karte mit. Sie wird automatisch als Frontend-Ressource registriert, du musst nichts unter *Ressourcen* eintragen (nach der Installation ggf. Browser-Cache leeren bzw. App neu laden).
+
+```yaml
+type: custom:schnitzeljagd-card
+entity: sensor.funkel_luna_fortschritt   # irgendeine Entity der Jagd genügt
+title: Spielleitung                      # optional
+show_stations: true                      # optional: Stationen mit Aufgaben anzeigen
+```
+
+Die Karte zeigt Fortschrittsring, aktuelle Station, Spielstatus und Schatz, Buttons für Vorbereiten, Medien-Stopp, Zurücksetzen und Schatz-Freigabe, eine Stationsauswahl sowie je Station den Start-Button, Zusatz-Clips und die Erfolgshaken. Alle weiteren Entities findet sie selbst über das Gerät der Jagd. Sie ist über den visuellen Editor konfigurierbar und läuft mobil wie am Desktop.
+
+Alternativ liegt ein Beispiel aus Standardkarten in [`dashboard/example_dashboard.yaml`](dashboard/example_dashboard.yaml).
 
 ## Services
 
@@ -98,14 +111,14 @@ Ein fertiges Dashboard-Beispiel liegt in [`dashboard/example_dashboard.yaml`](da
 ```bash
 pip install pytest pyyaml
 pytest tests
+node tests/card.test.js
 ```
 
-Die Spiellogik (`model.py`, `engine.py`) kommt ohne Home Assistant aus und ist vollständig getestet. Die HA-Anbindung (`manager.py`, Plattformen, Config-Flow) wurde bisher nur geschrieben und syntaktisch geprüft, aber noch nicht in einer echten HA-Instanz ausgeführt.
+Die Spiellogik (`model.py`, `engine.py`) kommt ohne Home Assistant aus und ist getestet, ebenso die Entity-Erkennung und das Rendering der Karte (mit Browser-Stubs). Die HA-Anbindung (`manager.py`, Plattformen, Config-Flow, Karten-Registrierung) wurde bisher nur geschrieben und syntaktisch geprüft, aber noch nicht in einer echten HA-Instanz ausgeführt.
 
 ## Roadmap
 
 - Editor für Stationen und Aufgaben direkt in der UI
-- Eigene Lovelace-Karte für die Spielleitung
 - Übersetzung der Entity-Namen für weitere Sprachen
 
 Lizenz: MIT

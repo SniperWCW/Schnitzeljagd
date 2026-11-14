@@ -3,10 +3,11 @@
   "name": "Schnitzeljagd",
   "codeowners": ["@SniperWCW"],
   "config_flow": true,
+  "dependencies": ["http", "frontend"],
   "documentation": "https://github.com/SniperWCW/Schnitzeljagd",
   "integration_type": "service",
   "iot_class": "local_push",
   "issue_tracker": "https://github.com/SniperWCW/Schnitzeljagd/issues",
   "requirements": [],
-  "version": "0.1.1"
+  "version": "0.2.0"
 }

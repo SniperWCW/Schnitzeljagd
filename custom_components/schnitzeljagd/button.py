@@ -61,6 +61,12 @@ class StationButton(HuntEntity, ButtonEntity):
         self.station_id = station_id
         self._attr_name = f"Station {station_id} · {station.name} starten"
         self._attr_icon = station.icon or "mdi:play-circle"
+        self._attr_extra_state_attributes = {
+            "kind": "station",
+            "station_id": station_id,
+            "station_name": station.name,
+            "order": manager.hunt.stations.index(station),
+        }
 
     async def async_press(self) -> None:
         await self.manager.async_start_station(self.station_id)
@@ -76,6 +82,12 @@ class ClipButton(HuntEntity, ButtonEntity):
         self.clip_id = clip_id
         self._attr_name = f"Station {station_id} · {clip.name}"
         self._attr_icon = clip.icon or "mdi:movie-play"
+        self._attr_extra_state_attributes = {
+            "kind": "clip",
+            "station_id": station_id,
+            "clip_name": clip.name,
+            "description": clip.description,
+        }
 
     async def async_press(self) -> None:
         await self.manager.async_run_clip(self.station_id, self.clip_id)
