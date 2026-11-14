@@ -3,7 +3,7 @@
 DOMAIN = "schnitzeljagd"
 
 CONF_FILE = "hunt_file"
-CONF_INSTALL_EXAMPLE = "install_example"
+CONF_HUNT = "hunt"
 
 DEFAULT_FILE = "schnitzeljagd/funkel_luna.yaml"
 EXAMPLE_FILE = "funkel_luna.yaml"

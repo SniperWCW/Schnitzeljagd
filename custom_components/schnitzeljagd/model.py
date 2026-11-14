@@ -243,3 +243,92 @@ def parse_hunt(data: Any, validate_actions: Validator | None = None) -> Hunt:
         treasure_task=treasure_task,
         treasure_release=treasure_release,
     )
+
+
+# --------------------------------------------------------------------------- #
+# Serialisierung (für die Speicherung im Config-Entry)
+# --------------------------------------------------------------------------- #
+
+
+def _drop_empty(data: dict[str, Any]) -> dict[str, Any]:
+    return {k: v for k, v in data.items() if v not in (None, "", [])}
+
+
+def hunt_to_dict(hunt: Hunt) -> dict[str, Any]:
+    """Wandelt ein Hunt zurück in ein JSON-taugliches Dict (Gegenstück zu parse_hunt).
+
+    Wichtig: Es müssen die *rohen* Aktionen übergeben worden sein, also ein Hunt aus
+    `parse_hunt(data)` ohne Validator. Validierte Aktionen enthalten Template- und
+    timedelta-Objekte, die sich nicht speichern lassen.
+    """
+    return _drop_empty(
+        {
+            "name": hunt.name,
+            "subtitle": hunt.subtitle,
+            "icon": hunt.icon,
+            "on_prepare": hunt.on_prepare,
+            "on_stop": hunt.on_stop,
+            "on_reset": hunt.on_reset,
+            "treasure": _drop_empty(
+                {"released_by": hunt.treasure_task, "release": hunt.treasure_release}
+            ),
+            "stations": [
+                _drop_empty(
+                    {
+                        "id": s.id,
+                        "name": s.name,
+                        "icon": s.icon,
+                        "description": s.description,
+                        "intro": s.intro,
+                        "clips": [
+                            _drop_empty(
+                                {
+                                    "id": c.id,
+                                    "name": c.name,
+                                    "icon": c.icon,
+                                    "description": c.description,
+                                    "actions": c.actions,
+                                }
+                            )
+                            for c in s.clips
+                        ],
+                    }
+                )
+                for s in hunt.stations
+            ],
+            "tasks": [
+                _drop_empty(
+                    {
+                        "id": t.id,
+                        "name": t.name,
+                        "icon": t.icon,
+                        "description": t.description,
+                        "station": t.station,
+                        "next_station": t.next_station,
+                        "on_complete": t.on_complete,
+                    }
+                )
+                for t in hunt.tasks
+            ],
+        }
+    )
+
+
+def unique_keys(hunt: Hunt) -> set[str]:
+    """Alle Entity-Schlüssel (unique_id ohne Entry-Präfix), die zur Jagd gehören."""
+    keys = {
+        "current_station",
+        "progress",
+        "running",
+        "treasure",
+        "station",
+        "prepare",
+        "stop",
+        "reset",
+        "release_treasure",
+    }
+    for station in hunt.stations:
+        keys.add(f"start_{station.id}")
+        keys.update(f"clip_{station.id}_{clip.id}" for clip in station.clips)
+    keys.update(f"task_{task.id}" for task in hunt.tasks)
+    return keys

@@ -13,6 +13,7 @@ from homeassistant.config_entries import ConfigEntry, ConfigEntryState
 from homeassistant.core import HomeAssistant, ServiceCall
 from homeassistant.exceptions import ConfigEntryNotReady, ServiceValidationError
 from homeassistant.helpers import config_validation as cv
+from homeassistant.helpers import entity_registry as er
 from homeassistant.loader import async_get_integration
 from homeassistant.helpers.typing import ConfigType
 
@@ -21,6 +22,7 @@ from .const import (
     ATTR_STATION,
     ATTR_TASK,
     CONF_FILE,
+    CONF_HUNT,
     DOMAIN,
     PLATFORMS,
     SERVICE_COMPLETE_TASK,
@@ -32,9 +34,9 @@ from .const import (
     SERVICE_START_STATION,
     SERVICE_STOP,
 )
-from .loader import async_load_hunt
+from .loader import async_load_hunt, hunt_from_entry
 from .manager import HuntManager
-from .model import HuntError
+from .model import HuntError, unique_keys
 
 _LOGGER = logging.getLogger(__name__)
 
@@ -145,7 +147,10 @@ async def _async_register_services(hass: HomeAssistant) -> None:
 async def async_setup_entry(hass: HomeAssistant, entry: ConfigEntry) -> bool:
     """Lädt die Jagd-Datei und richtet Plattformen und Services ein."""
     try:
-        hunt = await async_load_hunt(hass, entry.data[CONF_FILE])
+        if CONF_HUNT in entry.options:
+            hunt = hunt_from_entry(entry)
+        else:  # Einträge aus Version 0.1/0.2 lesen weiterhin die YAML-Datei
+            hunt = await async_load_hunt(hass, entry.data[CONF_FILE])
     except FileNotFoundError as err:
         raise ConfigEntryNotReady(f"Jagd-Datei nicht gefunden: {err}") from err
     except HuntError as err:
@@ -157,9 +162,20 @@ async def async_setup_entry(hass: HomeAssistant, entry: ConfigEntry) -> bool:
     hass.data.setdefault(DOMAIN, {})[entry.entry_id] = manager
 
     await _async_register_services(hass)
+    _remove_orphaned_entities(hass, entry, manager)
     await hass.config_entries.async_forward_entry_setups(entry, PLATFORMS)
     entry.async_on_unload(entry.add_update_listener(_async_reload_on_change))
     return True
+
+
+def _remove_orphaned_entities(hass: HomeAssistant, entry: ConfigEntry, manager: HuntManager) -> None:
+    """Entfernt Entities gelöschter Stationen, Aufgaben und Clips aus der Registry."""
+    registry = er.async_get(hass)
+    prefix = f"{entry.entry_id}_"
+    valid = {prefix + key for key in unique_keys(manager.hunt)}
+    for ent in er.async_entries_for_config_entry(registry, entry.entry_id):
+        if ent.unique_id not in valid:
+            registry.async_remove(ent.entity_id)
 
 
 async def _async_reload_on_change(hass: HomeAssistant, entry: ConfigEntry) -> None:

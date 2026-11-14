@@ -3,33 +3,226 @@
     "step": {
       "user": {
         "title": "Schnitzeljagd einrichten",
-        "description": "Pfad zur Jagd-Datei relativ zu deinem Konfigurationsordner. Fehlt die Datei, kann die Beispieljagd \"Funkel & Luna\" dorthin kopiert werden.",
+        "menu_options": {
+          "new": "Neue, leere Jagd",
+          "example": "Beispieljagd „Funkel & Luna“",
+          "yaml": "Aus YAML-Datei importieren"
+        },
+        "description": "Wie möchtest du starten? Alles lässt sich danach über „Konfigurieren“ in der UI bearbeiten."
+      },
+      "new": {
+        "title": "Neue Jagd",
         "data": {
-          "hunt_file": "Jagd-Datei (YAML)",
-          "install_example": "Beispieljagd kopieren, falls die Datei fehlt"
+          "name": "Name",
+          "subtitle": "Untertitel"
         }
+      },
+      "example": {
+        "title": "Beispieljagd",
+        "description": "Legt die Beispieljagd „Funkel & Luna“ mit 6 Stationen und 7 Aufgaben an. Geräte und Medien sind Platzhalter und müssen danach unter „Konfigurieren“ angepasst werden."
+      },
+      "yaml": {
+        "title": "YAML importieren",
+        "data": {
+          "hunt_file": "Jagd-Datei (YAML)"
+        },
+        "description": "Pfad relativ zum Konfigurationsordner."
       }
     },
     "error": {
       "file_not_found": "Die Datei wurde nicht gefunden.",
       "invalid_hunt": "Die Jagd-Datei ist ungültig: {error}"
-    },
-    "abort": {
-      "already_configured": "Diese Jagd-Datei ist bereits eingerichtet."
     }
   },
   "options": {
     "step": {
       "init": {
-        "title": "Schnitzeljagd",
+        "title": "Schnitzeljagd bearbeiten",
+        "menu_options": {
+          "general": "Allgemein (Name, Untertitel)",
+          "stations": "Stationen",
+          "tasks": "Aufgaben (Erfolgshaken)",
+          "clips": "Zusatz-Clips",
+          "global_actions": "Vorbereiten, Stopp, Zurücksetzen",
+          "treasure": "Schatz",
+          "import_yaml": "Aus YAML-Datei importieren (ersetzt alles)",
+          "finish": "Speichern und beenden"
+        },
+        "description": "{overview}\n\nÄnderungen werden erst mit „Speichern und beenden“ übernommen."
+      },
+      "general": {
+        "title": "Allgemein",
+        "data": {
+          "name": "Name",
+          "subtitle": "Untertitel",
+          "icon": "Icon"
+        }
+      },
+      "global_actions": {
+        "title": "Vorbereiten, Stopp, Zurücksetzen",
+        "data": {
+          "on_prepare": "Beim Vorbereiten (z. B. Rollos schließen)",
+          "on_stop": "Beim Medien-Stopp",
+          "on_reset": "Beim Zurücksetzen"
+        }
+      },
+      "treasure": {
+        "title": "Schatz",
+        "data": {
+          "released_by": "Wird freigegeben durch Aufgabe",
+          "release": "Aktionen bei Freigabe (z. B. Schloss öffnen)"
+        }
+      },
+      "stations": {
+        "title": "Stationen",
+        "menu_options": {
+          "station_add": "Station hinzufügen",
+          "station_edit": "Station bearbeiten",
+          "station_delete": "Station löschen",
+          "init": "Zurück"
+        },
+        "description": "{overview}"
+      },
+      "station_add": {
+        "title": "Station hinzufügen",
+        "data": {
+          "name": "Name",
+          "icon": "Icon",
+          "description": "Hinweis für die Spielleitung",
+          "intro": "Aktionen beim Start der Station (Einleitungsclip)"
+        }
+      },
+      "station_edit": {
+        "title": "Station bearbeiten",
+        "data": {
+          "station": "Station"
+        }
+      },
+      "station_edit_form": {
+        "title": "Station bearbeiten",
+        "data": {
+          "name": "Name",
+          "icon": "Icon",
+          "description": "Hinweis für die Spielleitung",
+          "intro": "Aktionen beim Start der Station (Einleitungsclip)"
+        },
+        "description": "Station: {station}"
+      },
+      "station_delete": {
+        "title": "Station löschen",
+        "data": {
+          "station": "Station"
+        },
+        "description": "Löscht die Station samt Clips. Aufgaben bleiben erhalten, verlieren aber den Stationsbezug."
+      },
+      "tasks": {
+        "title": "Aufgaben",
+        "menu_options": {
+          "task_add": "Aufgabe hinzufügen",
+          "task_edit": "Aufgabe bearbeiten",
+          "task_delete": "Aufgabe löschen",
+          "init": "Zurück"
+        },
+        "description": "{overview}"
+      },
+      "task_add": {
+        "title": "Aufgabe hinzufügen",
+        "data": {
+          "name": "Name",
+          "station": "Gehört zu Station",
+          "icon": "Icon",
+          "description": "Hinweis für die Spielleitung",
+          "next_station": "Danach zu Station wechseln",
+          "on_complete": "Aktionen bei Erfolg (Haken)"
+        }
+      },
+      "task_edit": {
+        "title": "Aufgabe bearbeiten",
+        "data": {
+          "task": "Aufgabe"
+        }
+      },
+      "task_edit_form": {
+        "title": "Aufgabe bearbeiten",
+        "data": {
+          "name": "Name",
+          "station": "Gehört zu Station",
+          "icon": "Icon",
+          "description": "Hinweis für die Spielleitung",
+          "next_station": "Danach zu Station wechseln",
+          "on_complete": "Aktionen bei Erfolg (Haken)"
+        },
+        "description": "Aufgabe: {task}"
+      },
+      "task_delete": {
+        "title": "Aufgabe löschen",
+        "data": {
+          "task": "Aufgabe"
+        }
+      },
+      "clips": {
+        "title": "Zusatz-Clips",
+        "menu_options": {
+          "clip_add": "Clip hinzufügen",
+          "clip_edit": "Clip bearbeiten",
+          "clip_delete": "Clip löschen",
+          "init": "Zurück"
+        },
+        "description": "Zusätzliche manuelle Aktionen einer Station, z. B. „Finale Teil 1“.\n{overview}"
+      },
+      "clip_add": {
+        "title": "Clip hinzufügen",
+        "data": {
+          "station": "Station",
+          "name": "Name",
+          "icon": "Icon",
+          "description": "Hinweis für die Spielleitung",
+          "actions": "Aktionen"
+        }
+      },
+      "clip_edit": {
+        "title": "Clip bearbeiten",
+        "data": {
+          "clip": "Clip"
+        }
+      },
+      "clip_edit_form": {
+        "title": "Clip bearbeiten",
+        "data": {
+          "name": "Name",
+          "icon": "Icon",
+          "description": "Hinweis für die Spielleitung",
+          "actions": "Aktionen"
+        },
+        "description": "Clip: {clip}"
+      },
+      "clip_delete": {
+        "title": "Clip löschen",
+        "data": {
+          "clip": "Clip"
+        }
+      },
+      "import_yaml": {
+        "title": "Aus YAML importieren",
         "data": {
           "hunt_file": "Jagd-Datei (YAML)"
-        }
+        },
+        "description": "Ersetzt die gesamte aktuelle Konfiguration durch den Inhalt der Datei (relativ zum Konfigurationsordner)."
+      },
+      "finish_error": {
+        "title": "Jagd ungültig",
+        "description": "Die Jagd kann so nicht gespeichert werden: {error}\n\nMit „Weiter“ zurück zum Menü."
       }
     },
     "error": {
+      "invalid_actions": "Ungültige Aktion: {error}",
       "file_not_found": "Die Datei wurde nicht gefunden.",
-      "invalid_hunt": "Die Jagd-Datei ist ungültig: {error}"
+      "invalid_hunt": "Die Jagd-Datei ist ungültig: {error}",
+      "last_station": "Die letzte Station kann nicht gelöscht werden."
+    },
+    "abort": {
+      "file_not_found": "Die bisherige YAML-Datei wurde nicht gefunden.",
+      "invalid_hunt": "Die bisherige YAML-Datei ist ungültig."
     }
   },
   "entity": {

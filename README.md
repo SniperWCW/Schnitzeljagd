@@ -1,6 +1,6 @@
 # Schnitzeljagd für Home Assistant
 
-Eine generische, konfigurierbare **Schnitzeljagd-Steuerung** als HACS-Integration. Stationen, Aufgaben (Erfolgshaken), Videos, Audios und Lichteffekte definierst du in einer YAML-Datei. Die Integration liefert dafür Entities und Services, mit denen du die Jagd bequem vom Handy oder Tablet aus steuerst.
+Eine generische, konfigurierbare **Schnitzeljagd-Steuerung** als HACS-Integration. Stationen, Aufgaben (Erfolgshaken), Videos, Audios und Lichteffekte konfigurierst du komplett in der Home-Assistant-Oberfläche (alternativ per YAML-Import). Die Integration liefert dafür Entities und Services, mit denen du die Jagd bequem vom Handy oder Tablet aus steuerst.
 
 Entstanden für einen Kindergeburtstag: Drache **Funkel** und Einhorn **Luna** führen durch 6 Stationen im Haus. Die komplette Beispieljagd liegt als Vorlage bei.
 
@@ -19,13 +19,32 @@ Entstanden für einen Kindergeburtstag: Drache **Funkel** und Einhorn **Luna** f
 
 1. HACS → ⋮ → *Benutzerdefinierte Repositories* → `https://github.com/SniperWCW/Schnitzeljagd` als Typ *Integration*
 2. "Schnitzeljagd" installieren, Home Assistant neu starten
-3. *Einstellungen → Geräte & Dienste → Integration hinzufügen → Schnitzeljagd*
-4. Pfad der Jagd-Datei angeben (Standard: `schnitzeljagd/funkel_luna.yaml` im Konfigurationsordner). Fehlt die Datei, wird die Beispieljagd dorthin kopiert.
-5. Datei öffnen, Platzhalter-Entities und Medienpfade ersetzen, dann den Service `schnitzeljagd.reload_hunt` aufrufen.
+3. *Einstellungen → Geräte & Dienste → Integration hinzufügen → Schnitzeljagd* und wählen:
+   - **Neue, leere Jagd**: du baust alles selbst in der UI
+   - **Beispieljagd „Funkel & Luna“**: 6 Stationen, 7 Aufgaben als Vorlage (Geräte und Medien sind Platzhalter)
+   - **Aus YAML-Datei importieren**: für bestehende Jagd-Dateien
 
-Die Medien (z. B. `/media/schnitzeljagd/video/1A.mp4`) sprichst du über die HA-Medienquelle an: `media-source://media_source/local/schnitzeljagd/video/1A.mp4`.
+## Konfiguration in der UI
 
-## Aufbau der Jagd-Datei
+*Einstellungen → Geräte & Dienste → Schnitzeljagd → Konfigurieren* öffnet den Editor:
+
+| Menüpunkt | Inhalt |
+|---|---|
+| Allgemein | Name, Untertitel, Icon |
+| Stationen | hinzufügen, bearbeiten, löschen; je Station die **Aktionen beim Start** (Einleitungsclip) |
+| Aufgaben | Erfolgshaken mit **Aktionen bei Erfolg**, zugehöriger Station und optionalem Wechsel zur nächsten Station |
+| Zusatz-Clips | zusätzliche manuelle Buttons je Station (z. B. „Finale Teil 1“) |
+| Vorbereiten, Stopp, Zurücksetzen | globale Aktionen (Rollos schließen, Medien stoppen, ...) |
+| Schatz | durch welche Aufgabe er freigegeben wird und was dabei passiert |
+| Aus YAML importieren | ersetzt die gesamte Konfiguration durch eine Datei |
+
+Alle Aktionen bearbeitest du mit dem **normalen Home-Assistant-Aktionseditor** (wie bei Skripten): Medien abspielen, Licht, Wartezeiten, Bedingungen usw. Änderungen gelten erst nach **Speichern und beenden**; danach lädt die Integration neu. Entities gelöschter Stationen, Aufgaben und Clips werden automatisch entfernt. Der Spielstand (Haken, aktuelle Station) bleibt erhalten, soweit die Einträge noch existieren.
+
+Hinweis: Stationen werden nummeriert in der Reihenfolge ihres Anlegens (1, 2, 3, ...), Aufgaben bekommen ihre ID aus dem Namen. Medien sprichst du über die HA-Medienquelle an, z. B. `media-source://media_source/local/schnitzeljagd/video/1A.mp4`.
+
+## Referenz: YAML-Format
+
+Das Format ist identisch mit dem, was die UI intern speichert, und dient zum Import oder als Referenz.
 
 ```yaml
 name: Meine Jagd
@@ -118,7 +137,8 @@ Die Spiellogik (`model.py`, `engine.py`) kommt ohne Home Assistant aus und ist g
 
 ## Roadmap
 
-- Editor für Stationen und Aufgaben direkt in der UI
+- Stationen per Klick umsortieren
+- Export der Jagd als YAML
 - Übersetzung der Entity-Namen für weitere Sprachen
 
 Lizenz: MIT

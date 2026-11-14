@@ -3,33 +3,226 @@
     "step": {
       "user": {
         "title": "Set up scavenger hunt",
-        "description": "Path to the hunt file relative to your config folder. If it is missing, the example hunt \"Funkel & Luna\" can be copied there.",
+        "menu_options": {
+          "new": "New, empty hunt",
+          "example": "Example hunt “Funkel & Luna”",
+          "yaml": "Import from YAML file"
+        },
+        "description": "How do you want to start? Everything can be edited afterwards via “Configure”."
+      },
+      "new": {
+        "title": "New hunt",
         "data": {
-          "hunt_file": "Hunt file (YAML)",
-          "install_example": "Copy example hunt if the file is missing"
+          "name": "Name",
+          "subtitle": "Subtitle"
         }
+      },
+      "example": {
+        "title": "Example hunt",
+        "description": "Creates the example hunt “Funkel & Luna” with 6 stations and 7 tasks. Devices and media are placeholders and must be adjusted afterwards via “Configure”."
+      },
+      "yaml": {
+        "title": "Import YAML",
+        "data": {
+          "hunt_file": "Hunt file (YAML)"
+        },
+        "description": "Path relative to the config folder."
       }
     },
     "error": {
       "file_not_found": "The file was not found.",
       "invalid_hunt": "The hunt file is invalid: {error}"
-    },
-    "abort": {
-      "already_configured": "This hunt file is already set up."
     }
   },
   "options": {
     "step": {
       "init": {
-        "title": "Scavenger hunt",
+        "title": "Edit scavenger hunt",
+        "menu_options": {
+          "general": "General (name, subtitle)",
+          "stations": "Stations",
+          "tasks": "Tasks (checkmarks)",
+          "clips": "Extra clips",
+          "global_actions": "Prepare, stop, reset",
+          "treasure": "Treasure",
+          "import_yaml": "Import from YAML file (replaces everything)",
+          "finish": "Save and finish"
+        },
+        "description": "{overview}\n\nChanges only take effect after “Save and finish”."
+      },
+      "general": {
+        "title": "General",
+        "data": {
+          "name": "Name",
+          "subtitle": "Subtitle",
+          "icon": "Icon"
+        }
+      },
+      "global_actions": {
+        "title": "Prepare, stop, reset",
+        "data": {
+          "on_prepare": "On prepare (e.g. close blinds)",
+          "on_stop": "On media stop",
+          "on_reset": "On reset"
+        }
+      },
+      "treasure": {
+        "title": "Treasure",
+        "data": {
+          "released_by": "Released by task",
+          "release": "Actions on release (e.g. unlock)"
+        }
+      },
+      "stations": {
+        "title": "Stations",
+        "menu_options": {
+          "station_add": "Add station",
+          "station_edit": "Edit station",
+          "station_delete": "Delete station",
+          "init": "Back"
+        },
+        "description": "{overview}"
+      },
+      "station_add": {
+        "title": "Add station",
+        "data": {
+          "name": "Name",
+          "icon": "Icon",
+          "description": "Note for the game master",
+          "intro": "Actions when the station starts (intro clip)"
+        }
+      },
+      "station_edit": {
+        "title": "Edit station",
+        "data": {
+          "station": "Station"
+        }
+      },
+      "station_edit_form": {
+        "title": "Edit station",
+        "data": {
+          "name": "Name",
+          "icon": "Icon",
+          "description": "Note for the game master",
+          "intro": "Actions when the station starts (intro clip)"
+        },
+        "description": "Station: {station}"
+      },
+      "station_delete": {
+        "title": "Delete station",
+        "data": {
+          "station": "Station"
+        },
+        "description": "Deletes the station including its clips. Tasks are kept but lose their station link."
+      },
+      "tasks": {
+        "title": "Tasks",
+        "menu_options": {
+          "task_add": "Add task",
+          "task_edit": "Edit task",
+          "task_delete": "Delete task",
+          "init": "Back"
+        },
+        "description": "{overview}"
+      },
+      "task_add": {
+        "title": "Add task",
+        "data": {
+          "name": "Name",
+          "station": "Belongs to station",
+          "icon": "Icon",
+          "description": "Note for the game master",
+          "next_station": "Then switch to station",
+          "on_complete": "Actions on success (checkmark)"
+        }
+      },
+      "task_edit": {
+        "title": "Edit task",
+        "data": {
+          "task": "Task"
+        }
+      },
+      "task_edit_form": {
+        "title": "Edit task",
+        "data": {
+          "name": "Name",
+          "station": "Belongs to station",
+          "icon": "Icon",
+          "description": "Note for the game master",
+          "next_station": "Then switch to station",
+          "on_complete": "Actions on success (checkmark)"
+        },
+        "description": "Task: {task}"
+      },
+      "task_delete": {
+        "title": "Delete task",
+        "data": {
+          "task": "Task"
+        }
+      },
+      "clips": {
+        "title": "Extra clips",
+        "menu_options": {
+          "clip_add": "Add clip",
+          "clip_edit": "Edit clip",
+          "clip_delete": "Delete clip",
+          "init": "Back"
+        },
+        "description": "Additional manual actions of a station, e.g. “Finale part 1”.\n{overview}"
+      },
+      "clip_add": {
+        "title": "Add clip",
+        "data": {
+          "station": "Station",
+          "name": "Name",
+          "icon": "Icon",
+          "description": "Note for the game master",
+          "actions": "Actions"
+        }
+      },
+      "clip_edit": {
+        "title": "Edit clip",
+        "data": {
+          "clip": "Clip"
+        }
+      },
+      "clip_edit_form": {
+        "title": "Edit clip",
+        "data": {
+          "name": "Name",
+          "icon": "Icon",
+          "description": "Note for the game master",
+          "actions": "Actions"
+        },
+        "description": "Clip: {clip}"
+      },
+      "clip_delete": {
+        "title": "Delete clip",
+        "data": {
+          "clip": "Clip"
+        }
+      },
+      "import_yaml": {
+        "title": "Import from YAML",
         "data": {
           "hunt_file": "Hunt file (YAML)"
-        }
+        },
+        "description": "Replaces the entire current configuration with the file’s content (relative to the config folder)."
+      },
+      "finish_error": {
+        "title": "Hunt invalid",
+        "description": "The hunt cannot be saved like this: {error}\n\nPress “Submit” to return to the menu."
       }
     },
     "error": {
+      "invalid_actions": "Invalid action: {error}",
       "file_not_found": "The file was not found.",
-      "invalid_hunt": "The hunt file is invalid: {error}"
+      "invalid_hunt": "The hunt file is invalid: {error}",
+      "last_station": "The last station cannot be deleted."
+    },
+    "abort": {
+      "file_not_found": "The previous YAML file was not found.",
+      "invalid_hunt": "The previous YAML file is invalid."
     }
   },
   "entity": {
